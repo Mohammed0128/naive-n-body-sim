@@ -11,7 +11,7 @@ window = pyglet.window.Window(1400, 800)
 
 def make_circle_fill():
     """ Adds a vertex list of circle polygon to batch and returns it. """
-    num_points = 40
+    num_points = 400
     batch = pyglet.graphics.Batch()
     rad = math.pi * 2 / num_points # getting 360 / n in radians
     index = list(itertools.chain.from_iterable( (0, x-1, x)  for x in range(2, num_points+1) ))
@@ -27,7 +27,7 @@ def make_circle_fill():
 
 @jit(nopython=True, cache=True)
 def compute_radius(mass):
-    return mass**0.333 * 0.4
+    return mass**0.111 * 0.4
 
 
 # Initialize stuff
@@ -70,7 +70,7 @@ def turn(total_objects, masses, radii, px, py, vx, vy, deleted):
             # square distances
             dx2 = dx ** 2
             dy2 = dy ** 2
-            r2 = dx2 + dy2
+            r2 =  dx2 + dy2
             # Used to translate acceleration value into a vector later on
             normalizer = abs(dx) + abs(dy)
 
@@ -98,8 +98,8 @@ def turn(total_objects, masses, radii, px, py, vx, vy, deleted):
                 vx[j] += dx * normalizer / r2 * masses[i] / 1000000.0
                 vy[j] += dy * normalizer / r2 * masses[i] / 1000000.0
 
-        px[i] += vx[i]
-        py[i] += vy[i]
+        px[i] += vx[i] 
+        py[i] += vy[i]  
 
     # Clean up deleted objects after the round completion, in reverse order
     for i in sorted(to_clean)[::-1]:
@@ -122,7 +122,7 @@ def on_draw():
     gl.glClear(gl.GL_COLOR_BUFFER_BIT)
     for i in range(total_objects):
         gl.glPushMatrix()
-        gl.glColor3f(1,1,0)
+        gl.glColor3f(1,0,1)
         gl.glTranslatef(px[i], py[i], 0)
         gl.glScalef(radii[i], radii[i], 1)
         circlefill.draw(gl.GL_TRIANGLES)
